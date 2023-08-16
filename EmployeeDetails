@@ -1,0 +1,133 @@
+
+Insert values into Tables:
+
+INSERT INTO dbo.EmplyeeDemographics VALUES
+(1011, 'Ryan', 'Howard', 26, 'Male'),
+( NULL, 'Holly', 'Flax', NULL, 'NULL'),
+(1013, 'Darryl', 'Philbin', NULL, 'Male')
+
+INSERT INTO dbo.EmployeeSalary VALUES
+(NULL, 'NULL', NULL),
+(NULL, 'NULL', NULL),
+(NULL, 'NULL', NULL),
+(1010, 'NULL', 47000),
+(NULL, 'Salesman', 43000)
+
+JOINS
+
+SELECT *
+FROM dbo.EmplyeeDemographics
+
+SELECT *
+FROM dbo.EmployeeSalary
+
+SELECT *
+FROM dbo.EmplyeeDemographics
+FULL OUTER JOIN dbo.EmployeeSalary
+ON dbo.EmplyeeDemographics.EmployeeID = dbo.EmployeeSalary.EmployeeID
+
+SELECT EmplyeeDemographics.EmployeeID, Firstname, Lastname, Jobtitle, Salary
+FROM dbo.EmplyeeDemographics
+LEFT OUTER JOIN dbo.EmployeeSalary
+   ON dbo.EmplyeeDemographics.EmployeeID = dbo.EmployeeSalary.EmployeeID
+
+   /*
+   To get the employee with highest paid salary except from Michael Scott
+   */
+
+   SELECT EmplyeeDemographics.EmployeeID, Firstname, Lastname, Salary
+FROM dbo.EmplyeeDemographics
+INNER JOIN dbo.EmployeeSalary
+   ON dbo.EmplyeeDemographics.EmployeeID = dbo.EmployeeSalary.EmployeeID
+WHERE Firstname <> 'Michael'
+ORDER BY Salary DESC
+
+/*
+How do you know the average salary of Salesmen in the organisation
+*/
+
+--SELECT Jobtitle, AVG(Salary)
+--FROM dbo.EmplyeeDemographics
+--INNER JOIN dbo.EmployeeSalary
+--   ON dbo.EmplyeeDemographics.EmployeeID = dbo.EmployeeSalary.EmployeeID
+--  WHERE Jobtitle = 'Salesman'
+--  GROUP BY Jobtitle
+
+CREATE ANOTHER TABLE:
+CREATE TABLE WarehouseEmployeeDemographics
+(EmployeeID int,
+Firstname varchar(50),
+Lastname varchar(50),
+Age int,
+Gender varchar(50)
+)
+INSERT VALUES:
+--INSERT INTO dbo.WarehouseEmployeeDemographics VALUES
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(NULL, 'NULL', 'NULL', NULL, 'NULL'),
+--(1013, 'Darryl', 'Philbin', NULL, 'Male'),
+--(1050, 'Roy', 'Anderson', 31, 'Male'),
+--(1051, 'Hidetoshi', 'Hasagawa', 40, 'Male'),
+--(1052, 'Val', 'Johnson', 31, 'Female')
+
+
+UNIONS
+
+--SELECT *
+--FROM dbo.EmplyeeDemographics
+--Full Outer Join dbo.WarehouseEmployeeDemographics
+--   ON dbo.EmplyeeDemographics.EmployeeID = dbo.WarehouseEmployeeDemographics.EmployeeID
+
+--SELECT * FROM dbo.EmplyeeDemographics
+--UNION
+--SELECT * FROM dbo.WarehouseEmployeeDemographics
+
+
+CASE STATEMENT
+
+/*
+Case Statement comes on the second line after your first select query and add END once done with the case
+it is similar to IF or NESTED IF STATEMENT in Excel. For example, categorise employees younger than 30 as Young and others as old
+*/
+
+--select Firstname, Lastname, Age,
+--case
+--   when Age > 30 then 'Old'
+--   when Age between 17 and 27 then 'Baby'
+--   else 'Young'
+--end as AgeGroup
+--FROM [MSSQL Tutorial].dbo.EmplyeeDemographics
+--where Age is not null
+--order by Age
+
+/*
+Case Study using JOIN and CASE Statement: Increase Salaries and find out new salary figures
+Salesman by (10%), HR(5%), Accountant (7%) OTHERS(3%)
+*/
+
+SELECT *
+FROM [MSSQL Tutorial].dbo.EmplyeeDemographics
+JOIN [MSSQL Tutorial].dbo.EmployeeSalary
+ON [MSSQL Tutorial].dbo.EmplyeeDemographics.EmployeeID = [MSSQL Tutorial].dbo.EmployeeSalary.EmployeeID
+
+SELECT Firstname, Lastname, Jobtitle, Salary,
+CASE
+   WHEN Jobtitle = 'Salesman' THEN Salary + (Salary * .10)
+   WHEN Jobtitle = 'HR' THEN Salary + (Salary * .05)
+   WHEN Jobtitle = 'Accountant' THEN Salary + (Salary * .007)
+   ELSE Salary + (Salary * .03)
+END AS NewSalary
+FROM [MSSQL Tutorial].dbo.EmplyeeDemographics
+JOIN [MSSQL Tutorial].dbo.EmployeeSalary
+ON [MSSQL Tutorial].dbo.EmplyeeDemographics.EmployeeID = [MSSQL Tutorial].dbo.EmployeeSalary.EmployeeID
+
+
